@@ -12,7 +12,7 @@
     </script>
 
     <meta charset="utf-8">
-    <title>Pokengineer</title>
+    <title>KNN</title>
     <link rel="icon" href="https://raw.githubusercontent.com/pokengineer/pokengineer.github.io/main/assets/imgs/icon.ico">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -62,10 +62,44 @@
 
     <!-- Service Section -->
     <section  id="latest" class="section mb-0">
-        <div class="container">
-            <h6 class="section-title">Hoy un amigo te explica vecinos más cercanos</h6>
-            <p>La cosa es asi, KNN es como le decimos al algoritmo de vecinos más cercanos, "k-nearest neighbors" en inglés. Un modelo de clasificación de aprendizaje supervisado.</p>
-            <img src="../assets/imgs/blog_00_knn0.png" alt="stuff-1" style="max-width: 100%; max-height: 60%;" >
+        <div style="text-align: center;">
+            <img class="center" src="../assets/imgs/blog_01_knn.jpg" style="max-width: 60%; max-height: 60%;" >
+            <p><br /></p>
+            <h1 class="title">Un amigo te explica KNN</h1>
+        </div>
+        <div class="container"  style="text-align: justify; text-justify: inter-word;" >
+            <p>Primero que nada, KNN está en inglés, es la abreviación de k-nearest neighbors, que en español son los k vecinos más cercanos. Es un algoritmo que se usa en la ciencia de datos como modelo de clasificación y de regresión, y si no estás seguro que significa eso, te recomiendo leer <a href="https://pokengineer.github.io/blog/blog_00_intro.html" target="_blank">este</a> post que arme a modo de intro para explicar algunos de estos conceptos.</p>
+            <h6 class="section-title">Aprendizaje supervisado</h6>
+            <p>KNN es un modelo de aprendizaje supervisado, entonces, lo que tenemos que hacer es con nuestra data definir, por un lado, <b>datos de entrada</b> al modelo y, por otro lado, alguna <b>variable “objetivo”</b>, que es la que vamos a tratar de predecir. El target/objetivo puede ser un valor numérico (como en los problemas de regresión) o una etiqueta de clase (como en los de clasificación).</p>
+            <p>El modelo luego va a tratar de encontrar algún <b>patrón</b> en los datos de entrada que ayuden a predecir la variable objetivo. Si quiero predecir la temperatura de mañana algunos buenos datos de entrada podrían ser humedad, viento, temperatura de hoy, estación del año, fecha, hora, latitud, longitud y, a partir de ellos, el modelo va a “deducir” cómo interactúan estas variables para darme un estimado de temperatura de mañana. Si la pregunta es “¿Cuál va a ser la temperatura mañana?” es un problema de regresión, y la respuesta sería un número, como 13°C, si la pregunta en cambio es “¿Va a hacer más de 18 grados mañana?” es un problema de clasificación, y la respuesta sería sí o no.</p>
+            <p>La clave de estos modelos es que necesitamos datos de la variable objetivo para poder entrenarlos. En el ejemplo de la temperatura, para poder entrenar el modelo, primero tendría que ingresar muchos datos de distintos lugares, fechas, horas y temperaturas (observaciones), incluida la temperatura que hizo el día siguiente, para luego pedirle predecir el objetivo solo con los datos de entrada.</p>
+            <p>-eso quiere decir que si yo mido esos datos en la puerta de mi casa todos los días, después puedo hacer un pronóstico del tiempo mejor que el del noticiero?
+            <br />-Mmm no exactamente, podrías hacer un buen modelo de la temperatura en la puerta de tu casa, pero tus modelos siempre están sesgados por las observaciones que le metés.
+            <br />-cómo sesgado, si yo lo mido con un termómetro y lo ingreso, no es ningún tema de opinión esto.
+            <br />-claro, lo que pasa es que en la puerta de tu casa seguramente nunca nieve, por ejemplo, y ese mismo modelo después lo queres aplicar en un lugar más frío y el modelo nunca aprendió a predecir temperaturas negativas, porque ninguno de tus datos de entrada eran negativos.
+            <br />-si los datos de entrada son malos, la predicción es mala</p>
+            <h6 class="section-title">K-Vecinos más cercanos</h6>
+            <p>Ok, pero puntualmente KNN, ¿que hace? Es bastante intuitivo, cuando queremos predecir algo, usa toda la data con la que lo entrenamos, se fija cuáles <b>observaciones</b> están más <i>cerca</i> / son más parecidas y si se parecen en las otras cosas, podemos asumir que se va a parecer también en la variable objetivo.</p>
+            <p>Esta imagen nos ayuda bastante. Tenemos estas figuras flotando en la nada, algunos triángulos, algunos cuadrados; cuando a KNN le preguntamos por otro punto (que no sabemos qué es) agarra los k vecinos más cercanos (k es un número entero impar que nosotros elegimos) y, en base a eso, se la juega a decirnos que seguramente ese punto sea también un triángulo.</p>
+            <img class="center" src="../assets/imgs/blog_01_knn0.png" alt="img1" style="max-width: 60%; max-height: 60%;" >
+            <p>Una ventaja de este modelo es que tiene un solo <b>“hiperparámetro” </b> que es K, el número de vecinos que tenes que considerar. Si tenemos datos de entrada y definimos K, ya podemos empezar a usarlo.</p>
+            <h6 class="section-title">¿Pochoclo, Pororó o Palomita de Maiz?</h6>
+            <p>Vamos con un ejemplo más importante que la temperatura y los cuadrados. Suponéte que vas al cine con alguien que no conocés mucho, querés preguntarle si pedir un balde de pochoclos, pero es un match de una app de citas y no sabés si le dice pochoclo, pororó o alguna otra variante de las tantas que hay para referirse al <i>popcorn</i>.</p>
+            <p>Es un re problema, y muy serio, pero por suerte tenés el dato de latitud y longitud donde nació esta persona, y un censo de cómo le dice un montón de gente de distintos lugares de habla hispana. Suponete que ingresamos K = 5, lo que va a hacer el modelo ahora es buscar la latitud y longitud de esta persona y ver cuales son las 5 más cercanas, el que más se repita va a ser la “predicción”.</p>
+            <img class="center" src="../assets/imgs/blog_01_knn1.jpg" alt="img1" style="max-width: 60%; max-height: 60%;" >
+            <p>Dados estos vecinos (4 pochoclo, 1 pororó) nuestra predicción es que esta persona les va a decir pochoclos!</p>
+            <p>En este ejemplo, además sale a la luz una desventaja del modelo. Si bien es bastante sencillo de implementar, cuando lo corremos calcula la distancia entre mi punto y todos los otros puntos. Para un problema como el de los pochoclos, si yo parto de datos de todo el mundo resulta muy costoso computacionalmente, siendo algo que se puede simplificar en algunas reglas sencillas, como Buenos Aires = “Pochoclo”, Ciudad de México = “Palomita de maíz”.</p>
+            <h6 class="section-title">¿Qué significa Distancia?</h6>
+            <p>Todo este tiempo estuve hablando de cercanía y de distancia, pero KNN no está acotado solamente a problemas de geolocalización. Podemos usar cualquier dato que podamos llevar a un valor numérico a ser una variable de entrada. Si fuéramos por ejemplo un banco, y quisiéramos definir si un cliente es confiable para prestarle plata nos podemos hacer la pregunta “si le presto plata me la va a devolver?” y para buscar la respuesta revolvemos nuestras observaciones (que son todos los clientes a los que ya le prestamos plata y sabemos si nos la devolvieron o no).</p>
+            <p>Para este ejemplo agarramos a una persona imaginaria “Fede”. Fede tiene 20 años, y sus ingresos son de 200.000 pesos y no tiene hijos; el banco entonces agarra estos datos y los <b>“vectoriza”</b>, y Fede pasa a ser un punto en 3D así: (20, 200.000, 0)</p>
+            <p>Ahora busca los vecinos más cercanos, a ver si ellos devolvieron la plata o no, pero no vecinos de latitud y longitud, sino parecidos en estas 3 dimensiones (edad, ingresos, hijos) y seguramente encuentre gente joven 18-22 años, que gane en un rango parecido, soltera y con 0-1 hijos.</p>
+            <img class="center" src="../assets/imgs/blog_01_knn2.jpg" alt="img1" style="max-width: 60%; max-height: 60%;" >
+            <p>Y este truquito funciona para cualquier variable numérica, podemos sacar la distancia usando todas las dimensiones imaginarias que queramos, incluso podemos usar variables que no son numéricas ( estado civil) si lo pasamos a un valor <b>booleano</b> (0=soltero y 1=casado)</p>
+            <p>Es importante escalar los valores para una comparación más justa, pero eso lo vamos a hablar en otra oportunidad.</p>
+            <h6 class="section-title">Resumiendo</h6>
+            <p>KNN es un <b>modelo predictivo</b>, lo usamos para predecir categorías o estimar valores, y si bien hablamos de vecinos y distancias, el modelo puede interpretar cualquier variable numérica como una dimensión para buscar vecinos que <b>estén cerca</b>. Es bastante sencillo de explicar y de implementar, pero a veces puede resultar muy <b>costoso computacionalmente</b> si el set de datos es muy muy grande.</p>
+            <p>Si te interesó el post, compartilo con tus vecinos más cercanos</p>
+            <p><br><br><a href="https://www.linkedin.com/in/facu-vogel/" target="_blank">Facundo Vogel</a> - Julio 2024</p>
         </div>
     </section>
     <!-- End OF Service Section -->
